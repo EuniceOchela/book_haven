@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Cart</h2>
+
+    {% if items %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Format</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.book.title }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if item.format_type == 'pdf' else 'primary' }}">
+                        {{ item.format_type | upper }}
+                    </span>
+                </td>
+                <td>₦{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₦{{ item.quantity * item.unit_price }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('cart.remove_from_cart', item_id=item.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Remove this item from cart?');">
+                            Remove
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <h4>Total: ₦{{ total }}</h4>
+       <a href="{{ url_for('checkout.index') }}" class="btn btn-success btn-lg">Proceed to Checkout</a>
+   
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Your cart is empty. <a href="{{ url_for('main.home') }}">Browse Books</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

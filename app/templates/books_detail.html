@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-5">
+            {% if book.cover_image %}
+                <img src="{{ url_for('static', filename=book.cover_image) }}" class="img-fluid rounded shadow" alt="{{ book.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/default-book.jpg') }}" class="img-fluid rounded shadow" alt="{{ book.title }}">
+            {% endif %}
+        </div>
+        <div class="col-md-7">
+            <h1 class="display-5">{{ book.title }}</h1>
+            <p class="lead text-muted">by {{ book.author }}</p>
+            <p class="mt-4">{{ book.description }}</p>
+
+            <div class="mt-5">
+                <h4>Choose Format</h4>
+
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Hard Copy</h5>
+                                <p class="card-text">Physical book with delivery</p>
+                                <h3 class="text-primary">₦{{ book.hardcopy_price }}</h3>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <a href="{{ url_for('cart.add_to_cart', book_id=book.id, format='hardcopy') }}" 
+                                   class="btn btn-primary w-100">Buy Hard Copy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

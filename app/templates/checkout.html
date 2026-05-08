@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Checkout</h2>
+
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-lg-7">
+            <h5>Order Summary</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Format</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.book.title }}</td>
+                        <td><span class="badge bg-{{ 'success' if item.format_type=='pdf' else 'primary' }}">{{ item.format_type|upper }}</span></td>
+                        <td>₦{{ item.unit_price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₦{{ item.quantity * item.unit_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4 class="text-end">Total: ₦{{ total }}</h4>
+        </div>
+
+        <!-- Delivery Form (if hardcopy exists) -->
+        {% if has_hardcopy %}
+        <div class="col-lg-5">
+            <h5>Delivery Address</h5>
+            <form method="POST" action="{{ url_for('checkout.process') }}">
+                <div class="mb-3">
+                    <label>Full Name</label>
+                    <input type="text" name="full_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Street Address</label>
+                    <input type="text" name="street_address" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>City</label>
+                        <input type="text" name="city" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>State</label>
+                        <input type="text" name="state" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success mt-4 w-100">Proceed to Payment</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="col-lg-5">
+            <div class="alert alert-info">
+                <strong>All items are PDF copies.</strong><br>
+                No delivery address needed. Proceed directly to payment.
+            </div>
+            <a href="{{ url_for('checkout.process') }}" class="btn btn-success w-100">Proceed to Payment</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

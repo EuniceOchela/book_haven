@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Books{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Explore Our Books</h1>
+        <p class="text-muted">
+            Discover powerful books that will inspire, educate and transform your life.
+        </p>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Books Grid -->
+    <div class="row g-4">
+
+        {% for book in books %}
+        <div class="col-md-4 col-lg-3">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <!-- Book Cover -->
+                <div class="text-center p-3">
+                    <img src="{{ url_for('static', filename=book.cover_image) }}"
+                         alt="{{ book.title }}"
+                         class="img-fluid rounded"
+                         style="height: 300px; object-fit: cover;">
+                </div>
+
+                <!-- Book Details -->
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title fw-bold">
+                        {{ book.title }}
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        By {{ book.author }}
+                    </p>
+
+                    <p class="small text-muted">
+                        {{ book.description[:100] }}...
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <!-- Prices -->
+                        <div class="mb-3">
+
+                            {% if book.hardcopy_price %}
+                            <p class="mb-1">
+                                <strong>Hardcopy:</strong>
+                                ₦{{ "{:,.0f}".format(book.hardcopy_price) }}
+                            </p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Buy Buttons -->
+                        <div class="d-grid gap-2">
+
+
+                            {% if book.hardcopy_price %}
+                            <form method="POST"
+                                  action="{{ url_for('cart.add_to_cart', book_id=book.id) }}">
+
+                                <input type="hidden" name="format_type" value="hardcopy">
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-sm w-100">
+                                    Buy Hardcopy
+                                </button>
+                            </form>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- Empty State -->
+    {% if not books %}
+    <div class="text-center py-5">
+        <h4>No books available yet.</h4>
+        <p class="text-muted">Please check back later.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
