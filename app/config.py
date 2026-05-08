@@ -3,6 +3,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+db_url = os.getenv("DATABASE_URL")
+
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     # SQLALCHEMY_DATABASE_URI = "postgresql://postgres:John4u.com@localhost:5432/the_bookers"
