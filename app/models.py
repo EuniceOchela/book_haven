@@ -71,7 +71,7 @@ class Order(db.Model):
     payment_reference = db.Column(db.String(120), unique=True, nullable=True)
     payment_processor = db.Column(db.String(50), nullable=True)
     payment_status = db.Column(db.String(50), nullable=True)
-    user = db.relationship('User', backref='orders')
+    user = db.relationship('User', backref='order')
     items = db.relationship('OrderItem', backref='order', lazy=True, cascade='all, delete-orphan')
 
 
