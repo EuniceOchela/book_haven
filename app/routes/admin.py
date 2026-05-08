@@ -6,6 +6,7 @@ from app import db
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload, selectinload
 import os
+from flask import abort
 
 
 
@@ -23,6 +24,8 @@ def dashboard():
     total_books = Book.query.count()
     total_orders = Order.query.count()
     pending_orders = Order.query.filter_by(order_status='pending').count()
+    if not current_user.is_admin:
+        abort(403)
 
     return render_template('admin/dashboard.html',
                            total_books=total_books,
