@@ -7,7 +7,7 @@ load_dotenv(override=True)
 db_url = os.getenv("DATABASE_URL")
 
 if db_url and db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
