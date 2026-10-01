@@ -12,7 +12,7 @@ if db_url and db_url.startswith("postgres://"):
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     # SQLALCHEMY_DATABASE_URI = "postgresql://postgres:John4u.com@localhost:5432/the_bookers"
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Flutterwave
